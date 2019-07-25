@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include <stdlib.h>
-#include<conio.h>
 //checking for operating system
 #ifdef _WIN32
     //code for Windows (32-bit and 64-bit, this part is common)
@@ -34,6 +33,7 @@ void draw();
 void input();
 void logic();
 
+
 //Global variables
 const int width=20,height=10;
 int gameover;
@@ -42,10 +42,13 @@ int x,y,fruitX,fruitY;
 enum dect{STOP=0,LEFT,RIGHT,TOP,DOWN};
 enum dect dir;
 char mouth;
+int tailX[100],tailY[100];
+int slength;
 
 /*Declare the initial values of the code in setup function */
 void setup(){
     gameover=0;
+    slength=0;
     dir=STOP;
     x=width/2;
     y=height/2;
@@ -58,6 +61,8 @@ void setup(){
 /*To draw the box and snake body*/
 void draw(){
     system("cls");
+    printf("Score: %d     ",score);
+    printf("length: %d\n\n",slength);
     for(int i=0 ; i <= width+1 ; i++){
         printf("#");
     }
@@ -74,7 +79,16 @@ void draw(){
                 printf("@");
             }
             else{
-             printf(" ");
+               int flag = 0;
+               for(int k=0 ; k < slength ; k++)
+              {
+                if(tailX[k]==j && tailY[k]==i){
+                    printf("o");
+                    flag=1;
+                }
+              }
+               if(!flag)
+               printf(" ");
             }
             if(j==width-1)
                 printf("#");
@@ -85,7 +99,6 @@ void draw(){
         printf("#");
     }
     printf("\n");
-    printf("Score: %d\n",score);
 }
 
 /*Function for taking keyword input*/
@@ -120,6 +133,19 @@ void input()
 
 /*Function used for the movement of the snake*/
 void logic(){
+   int prevX=tailX[0];
+   int prevY=tailY[0];
+   int prev2X,prev2Y;
+   tailX[0]=x;
+   tailY[0]=y;
+   for(int i=1 ; i < slength ; i++){
+    prev2X=tailX[i];
+    prev2Y=tailY[i];
+    tailX[i]=prevX;
+    tailY[i]=prevY;
+    prevX=prev2X;
+    prevY=prev2Y;
+   }
    switch (dir)
 	{
 	case LEFT:
@@ -141,15 +167,24 @@ void logic(){
      over();
    if(y > height || y<0)
      over();
+   for(int i=0 ; i < slength ; i++){
+    if(tailX[i]==x && tailY[i]==y){
+        over();
+    }
+   }
    if(x==fruitX && y==fruitY){
     score+=5;
     fruitX=rand() % width;
     fruitY=rand() % height;
+    slength++;
    }
 }
 //Screen which is seen when u hit the wall or yourself at the end of game
 void over(){
 	system("cls");
+    printf("Final Score: %d     ",score);
+    printf("Max length: %d\n\n",slength);
+
 			printf("\n");
 			printf("\t   ((((      ()     ()      () (((((((      (()) (        ) ((((((  ()))))\n");
 			printf("\t (     (    (  )    ( )    ( ) (           (    ) (      )  (       ()   ))\n");
@@ -158,17 +193,20 @@ void over(){
 			printf("\t   ((  ( (        ) (        ) (((((((      (())     ()     ((((((  ()    ))\n");
 
    printf("\n\n");
+
       restart();
 }
 
 //Function for the restart of the game
 void restart(){
-    char KEY;
+    char KEY='\0';
     int valid=0;
+    char ch;
     while(!valid){
     printf("If u wanna play the game again press Y else Press N\n");
     scanf("%c",&KEY);
     if(KEY=='y' || KEY=='Y'){
+        ch=getchar();
         main();
         valid=1;
     }
@@ -178,13 +216,11 @@ void restart(){
     }
     else{
         system("cls");
-        printf("Plzz press the valid key");
+        printf("Plzz press the valid key\n");
         valid=0;
     }
     }
-    system("cls");
 }
-
 
 
 int main(){
@@ -197,3 +233,6 @@ int main(){
 
 return 0;
 }
+
+
+
