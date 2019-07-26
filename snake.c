@@ -32,6 +32,7 @@ void setup();
 void draw();
 void input();
 void logic();
+void Rules();
 
 
 //Global variables
@@ -60,7 +61,7 @@ void setup(){
 
 /*To draw the box and snake body*/
 void draw(){
-    system("cls");
+   CLEARSCREEN;
     printf("Score: %d     ",score);
     printf("length: %d\n\n",slength);
     for(int i=0 ; i <= width+1 ; i++){
@@ -104,9 +105,9 @@ void draw(){
 /*Function for taking keyword input*/
 void input()
 {
-	if (_kbhit())
+	if (CHECKKEY)
 	{
-		switch (_getch())
+		switch (NBGETCHAR )
 		{
 		case 'a':
 			dir = LEFT;
@@ -181,7 +182,7 @@ void logic(){
 }
 //Screen which is seen when u hit the wall or yourself at the end of game
 void over(){
-	system("cls");
+	CLEARSCREEN;
     printf("Final Score: %d     ",score);
     printf("Max length: %d\n\n",slength);
 
@@ -222,8 +223,24 @@ void restart(){
     }
 }
 
+void Rules(){
+    printf("\t\tUse the keys a,d,w,s to move left,Right,up down and X for exit game anytime");
+    printf("\n\n\n\n\n\n\n");
+    printf("\t\t\t\t\tLoading ...\n\t\t\t\t\t");
+    for(int i=0 ; i < 15 ; i++){
+        printf("*");
+        for(int j=0;j<10000;j++){
+            for(int k=0;k<10000;k++){
+
+            }
+        }
+
+    }
+
+}
 
 int main(){
+    Rules();
     setup();
     while(!gameover){
         draw();     //To draw the snake mouth and the box
