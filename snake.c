@@ -216,7 +216,7 @@ void restart(){
         valid=1;
     }
     else{
-        system("cls");
+        CLEARSCREEN;
         printf("Plzz press the valid key\n");
         valid=0;
     }
